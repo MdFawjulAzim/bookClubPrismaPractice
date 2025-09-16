@@ -6,10 +6,65 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  books     Book[]
+  reviews   Review[]
+  followers Follows[] @relation("followers")
+  following Follows[] @relation("following")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Book {
+  id        Int      @id @default(autoincrement())
+  title     String
+  author    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  genres    Genre[]  @relation("BookGenres")
+  reviews   Review[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String?
+  book      Book     @relation(fields: [bookId], references: [id])
+  bookId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Genre {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  books     Book[]   @relation("BookGenres")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Follows {
+  id          Int      @id @default(autoincrement())
+  follower    User     @relation("following", fields: [followerId], references: [id])
+  followerId  Int
+  following   User     @relation("followers", fields: [followingId], references: [id])
+  followingId Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([followerId, followingId])
 }
