@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Create genres
-  const genres = await prisma.genre.createMany({
+  await prisma.genre.createMany({
     data: [
       { name: "Fantasy" },
       { name: "Sci-Fi" },
@@ -14,7 +14,7 @@ async function main() {
   });
 
   // Create users
-  const users = await prisma.user.createMany({
+  await prisma.user.createMany({
     data: [
       { name: "Alice", email: "alice@example.com" },
       { name: "Bob", email: "bob@example.com" },
@@ -28,7 +28,7 @@ async function main() {
   const allUsers = await prisma.user.findMany();
 
   // Create books
-  await prisma.book.createMany({
+  const allBooks = await prisma.book.createMany({
     data: [
       { title: "The Hobbit", author: "J.R.R. Tolkien", userId: allUsers[0].id },
       { title: "Dune", author: "Frank Herbert", userId: allUsers[1].id },
@@ -41,25 +41,35 @@ async function main() {
   });
 
   // Add reviews
-  const allBooks = await prisma.book.findMany();
+  const books = await prisma.book.findMany();
   await prisma.review.createMany({
     data: [
       {
         rating: 5,
         comment: "Amazing!",
-        bookId: allBooks[0].id,
+        bookId: books[0].id,
         userId: allUsers[1].id,
       },
       {
         rating: 4,
         comment: "Great read",
-        bookId: allBooks[1].id,
+        bookId: books[1].id,
         userId: allUsers[2].id,
       },
     ],
   });
 
-  console.log("Database seeded successfully!");
+  // Add follow relationships
+  await prisma.follows.createMany({
+    data: [
+      { followerId: allUsers[0].id, followingId: allUsers[1].id }, // Alice follows Bob
+      { followerId: allUsers[0].id, followingId: allUsers[2].id }, // Alice follows Charlie
+      { followerId: allUsers[1].id, followingId: allUsers[2].id }, // Bob follows Charlie
+    ],
+    skipDuplicates: true,
+  });
+
+  console.log("Database seeded successfully with follows!");
 }
 
 main()
