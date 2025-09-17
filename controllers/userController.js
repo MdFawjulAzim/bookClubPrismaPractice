@@ -128,9 +128,37 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
+  const userId = parseInt(id);
 
   try {
-    await prisma.user.delete({ where: { id: parseInt(id) } });
+    await prisma.$transaction(async (tx) => {
+      // 1. Delete all reviews for books owned by this user
+      await tx.review.deleteMany({
+        where: { book: { userId } },
+      });
+
+      // 2. Delete reviews written by this user (on other people's books)
+      await tx.review.deleteMany({
+        where: { userId },
+      });
+
+      // 3. Delete books created by this user
+      await tx.book.deleteMany({
+        where: { userId },
+      });
+
+      // 4. Delete follows (both follower & following)
+      await tx.follows.deleteMany({
+        where: {
+          OR: [{ followerId: userId }, { followingId: userId }],
+        },
+      });
+
+      // 5. Finally delete the user
+      await tx.user.delete({
+        where: { id: userId },
+      });
+    });
 
     return res.status(200).json({
       status: "success",

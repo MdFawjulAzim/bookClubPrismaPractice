@@ -1,7 +1,9 @@
 // src/pages/BooksPage.jsx
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useGetBooksQuery, useSearchBooksQuery } from "@/store/services/bookApi";
 import BookCard from "../component/BookCard";
+import { Plus } from "lucide-react";
 
 export default function BooksPage() {
   const [genre, setGenre] = useState("");
@@ -14,7 +16,16 @@ export default function BooksPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">All Books</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">All Books</h1>
+        <Link
+          to="/books/new"
+          className="btn flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg"
+        >
+          <Plus size={18} />
+          Add Book
+        </Link>
+      </div>
 
       {/* Search */}
       <div className="flex gap-2 mb-6">
