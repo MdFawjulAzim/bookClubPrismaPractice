@@ -59,3 +59,37 @@ exports.createReview = async (req, res) => {
     });
   }
 };
+
+exports.updateReview = async (req, res) => {
+  const { id } = req.params;
+  const { rating, comment } = req.body;
+
+  try {
+    const review = await prisma.review.update({
+      where: { id: parseInt(id) },
+      data: { rating, comment },
+    });
+
+    return res.status(200).json({
+      status: "success",
+      message: "Review updated successfully",
+      data: review,
+    });
+  } catch (error) {
+    console.error("updateReview error:", error);
+
+    if (error.code === "P2025") {
+      // Prisma error when record not found
+      return res.status(404).json({
+        status: "error",
+        message: "Review not found",
+      });
+    }
+
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to update review",
+      error: error.message,
+    });
+  }
+};
