@@ -93,3 +93,42 @@ exports.searchByGenre = async (req, res) => {
     data: books,
   });
 };
+
+exports.updateBook = async (req, res) => {
+  const { id } = req.params;
+  const { title, author, genreIds } = req.body;
+
+  try {
+    const book = await prisma.book.update({
+      where: { id: parseInt(id) },
+      data: {
+        title,
+        author,
+        genres: { connect: genreIds.map((id) => ({ id })) },
+      },
+      include: { genres: true },
+    });
+
+    return res.status(200).json({
+      status: "success",
+      message: "Book updated successfully",
+      data: book,
+    });
+  } catch (error) {
+    console.error("updateBook error:", error);
+
+    if (error.code === "P2025") {
+      // Prisma error when record not found
+      return res.status(404).json({
+        status: "error",
+        message: "Book not found",
+      });
+    }
+
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to update book",
+      error: error.message,
+    });
+  }
+};
