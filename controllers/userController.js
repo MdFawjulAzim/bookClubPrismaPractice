@@ -64,3 +64,30 @@ exports.createUser = async (req, res) => {
     });
   }
 };
+
+// controllers/userController.js
+
+exports.getFeed = async (req, res) => {
+  const { id } = req.params;
+
+  // Find all users the current user is following
+  const following = await prisma.follows.findMany({
+    where: { followerId: parseInt(id) },
+    include: {
+      following: {
+        include: {
+          books: { include: { genres: true, reviews: true, user: true } },
+        },
+      },
+    },
+  });
+
+  // Flatten all books into a single array
+  const feedBooks = following.flatMap((f) => f.following.books);
+
+  return res.status(200).json({
+    status: "success",
+    message: "Feed fetched successfully",
+    data: feedBooks,
+  });
+};
