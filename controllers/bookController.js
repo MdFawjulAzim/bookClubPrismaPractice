@@ -79,3 +79,17 @@ exports.createBook = async (req, res) => {
     });
   }
 };
+
+exports.searchByGenre = async (req, res) => {
+  const { genre } = req.query;
+  const books = await prisma.book.findMany({
+    where: { genres: { some: { name: genre } } },
+    include: { genres: true, user: true, reviews: true },
+  });
+
+  return res.status(200).json({
+    status: "success",
+    message: "Books fetched successfully",
+    data: books,
+  });
+};

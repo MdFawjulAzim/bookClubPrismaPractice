@@ -4,10 +4,13 @@ const {
   getBooks,
   getBook,
   createBook,
+  searchByGenre,
 } = require("../controllers/bookController");
 
 router.get("/", getBooks);
+router.get("/search", searchByGenre);
 router.get("/:id", getBook);
 router.post("/", createBook);
 
+// routes/books.js
 module.exports = router;
