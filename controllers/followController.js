@@ -82,3 +82,38 @@ exports.getFollowing = async (req, res) => {
     data: following,
   });
 };
+
+exports.unfollowUser = async (req, res) => {
+  const { followerId, followingId } = req.body;
+
+  try {
+    await prisma.follows.delete({
+      where: {
+        followerId_followingId: {
+          followerId: parseInt(followerId),
+          followingId: parseInt(followingId),
+        },
+      },
+    });
+
+    return res.status(200).json({
+      status: "success",
+      message: "Follow deleted successfully",
+    });
+  } catch (error) {
+    console.error("unfollowUser error:", error);
+
+    if (error.code === "P2025") {
+      return res.status(404).json({
+        status: "error",
+        message: "Follow not found",
+      });
+    }
+
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to delete follow",
+      error: error.message,
+    });
+  }
+};
