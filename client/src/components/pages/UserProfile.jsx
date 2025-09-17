@@ -13,7 +13,7 @@ export default function UserProfile() {
   const [unfollowUser] = useUnfollowUserMutation();
   const user = users?.data;
   const currentUserId = 1; // Replace with actual logged-in user ID from auth
-  const isFollowing = user.followers.some(f => f.followerId === currentUserId);
+  const isFollowing = user?.followers.some(f => f.followerId === currentUserId);
 
   if (isLoading) return <p>Loading user...</p>;
 
