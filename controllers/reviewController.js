@@ -93,3 +93,31 @@ exports.updateReview = async (req, res) => {
     });
   }
 };
+
+exports.deleteReview = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.review.delete({ where: { id: parseInt(id) } });
+
+    return res.status(200).json({
+      status: "success",
+      message: "Review deleted successfully",
+    });
+  } catch (error) {
+    console.error("deleteReview error:", error);
+
+    if (error.code === "P2025") {
+      return res.status(404).json({
+        status: "error",
+        message: "Review not found",
+      });
+    }
+
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to delete review",
+      error: error.message,
+    });
+  }
+};
