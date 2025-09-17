@@ -91,3 +91,37 @@ exports.getFeed = async (req, res) => {
     data: feedBooks,
   });
 };
+
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { name, email } = req.body;
+
+  try {
+    const user = await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: { name, email },
+    });
+
+    return res.status(200).json({
+      status: "success",
+      message: "User updated successfully",
+      data: user,
+    });
+  } catch (error) {
+    console.error("updateUser error:", error);
+
+    if (error.code === "P2025") {
+      // Prisma error when record not found
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to update user",
+      error: error.message,
+    });
+  }
+};
