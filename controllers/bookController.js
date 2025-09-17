@@ -132,3 +132,31 @@ exports.updateBook = async (req, res) => {
     });
   }
 };
+
+exports.deleteBook = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.book.delete({ where: { id: parseInt(id) } });
+
+    return res.status(200).json({
+      status: "success",
+      message: "Book deleted successfully",
+    });
+  } catch (error) {
+    console.error("deleteBook error:", error);
+
+    if (error.code === "P2025") {
+      return res.status(404).json({
+        status: "error",
+        message: "Book not found",
+      });
+    }
+
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to delete book",
+      error: error.message,
+    });
+  }
+};
