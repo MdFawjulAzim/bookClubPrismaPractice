@@ -1,4 +1,3 @@
-// src/pages/SearchPage.jsx
 import { useSearchBooksQuery } from "@/store/services/bookApi";
 import React, { useState } from "react";
 import BookCard from "../component/BookCard";
@@ -10,37 +9,40 @@ export default function SearchPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Search Books</h1>
+      {/* Page Title */}
+      <h1 className="text-3xl font-bold mb-8 text-gray-800">Search Books</h1>
 
-      <div className="flex gap-2 mb-6">
+      {/* Search Bar */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <input
           value={genre}
           onChange={(e) => setGenre(e.target.value)}
           placeholder="Enter genre..."
-          className="input flex-1"
+          className="flex-1 px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-primary focus:border-primary transition"
         />
         <button
-          className="btn bg-primary text-white px-4"
           onClick={() => refetch()}
+          className="px-5 py-3 bg-primary text-white rounded-xl shadow hover:shadow-md transition"
         >
           Search
         </button>
       </div>
 
+      {/* Results */}
       {isLoading ? (
-        <p>Searching...</p>
+        <p className="text-center text-gray-600 mt-10">Searching...</p>
       ) : isError ? (
-        <p className="text-red-500">Error searching books</p>
+        <p className="text-center text-red-500 mt-10">Error searching books</p>
       ) : books?.length ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {books.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
         </div>
       ) : genre ? (
-        <p className="text-gray-500">No books found for "{genre}"</p>
+        <p className="text-center text-gray-500 mt-10">No books found for "{genre}"</p>
       ) : (
-        <p className="text-gray-500">Enter a genre to search.</p>
+        <p className="text-center text-gray-500 mt-10">Enter a genre to search.</p>
       )}
     </div>
   );
