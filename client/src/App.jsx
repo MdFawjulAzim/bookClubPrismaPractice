@@ -3,6 +3,9 @@ import FeedPage from "./components/pages/FeedPage";
 import BooksPage from "./components/pages/BooksPage";
 import AddBook from "./components/pages/AddBook";
 import BookDetail from "./components/pages/BookDetail";
+import UsersPage from "./components/pages/UsersPage";
+import UserProfile from "./components/pages/UserProfile";
+import SearchPage from "./components/pages/SearchPage";
 
 export default function App() {
   return (
@@ -13,9 +16,10 @@ export default function App() {
         <Route path="/books" element={<BooksPage />} />
         <Route path="/books/new" element={<AddBook />} />
         <Route path="/books/:id" element={<BookDetail />} />
-        {/* <Route path="/users" element={<UsersPage />} />
+        
+        <Route path="/users" element={<UsersPage />} />
         <Route path="/users/:id" element={<UserProfile />} />
-        <Route path="/search" element={<SearchPage />} />  */}
+        <Route path="/search" element={<SearchPage />} /> 
        
       </Routes>
     </BrowserRouter>
