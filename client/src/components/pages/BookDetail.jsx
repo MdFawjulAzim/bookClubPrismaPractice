@@ -22,7 +22,7 @@ export default function BookDetail() {
     if (!reviewText.trim()) return;
     await createReview({
       bookId: book.id,
-      content: reviewText,
+      comment: reviewText,
       rating,
       userId: 1, // Replace with actual logged-in user ID
     });
@@ -37,7 +37,7 @@ export default function BookDetail() {
         <h1 className="text-3xl font-bold text-gray-900">{book.title}</h1>
         <p className="text-gray-500 text-lg">{book.author}</p>
         <p className="text-gray-400 text-sm">{dayjs(book.createdAt).fromNow()}</p>
-        <div className="mt-4">
+        <div className="mt-4 bg-black text-white px-4 py-2 rounded-xl inline-block">
           <ExportBooksPDF books={[book]} />
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function BookDetail() {
                     {r.user.name}
                   </p>
                 )}
-                <p className="text-gray-700">{r.content}</p>
+                <p className="text-gray-700">{r.comment}</p>
               </li>
             ))}
           </ul>

@@ -44,7 +44,7 @@ export default function UserProfile() {
             <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
             <p className="text-gray-500">{user.email}</p>
             <p className="text-gray-400 mt-1">
-              Followers: {user.followersCount} | Following: {user.followingCount}
+              Followers: {user?.followers?.length || 0} | Following: {user?.following?.length || 0}
             </p>
           </div>
         </div>
