@@ -7,9 +7,11 @@ const {
   getFeed,
   updateUser,
   deleteUser,
+  getUsersTakeLimit,
 } = require("../controllers/userController");
 
 router.get("/", getUsers);
+router.get("/take-limit", getUsersTakeLimit);
 router.get("/:id", getUser);
 router.post("/", createUser);
 router.put("/:id", updateUser);

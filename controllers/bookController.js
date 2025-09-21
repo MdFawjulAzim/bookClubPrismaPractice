@@ -161,7 +161,7 @@ exports.deleteBook = async (req, res) => {
   }
 };
 
-exports.bookUser = async (req, res) => {
+exports.bookUserSelect = async (req, res) => {
   const { id } = req.params;
   const book = await prisma.book.findUnique({
     where: {

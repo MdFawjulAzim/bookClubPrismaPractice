@@ -7,7 +7,7 @@ const {
   searchByGenre,
   updateBook,
   deleteBook,
-  bookUser,
+  bookUserSelect,
 } = require("../controllers/bookController");
 
 router.get("/", getBooks);
@@ -17,7 +17,7 @@ router.post("/", createBook);
 router.put("/:id", updateBook);
 router.delete("/:id", deleteBook);
 
-router.get("/user-book/:id", bookUser);
+router.get("/user-book/:id", bookUserSelect);
 
 // routes/books.js
 module.exports = router;

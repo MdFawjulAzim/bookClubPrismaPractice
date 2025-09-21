@@ -12,6 +12,18 @@ exports.getUsers = async (req, res) => {
   });
 };
 
+exports.getUsersTakeLimit = async (req, res) => {
+  const users = await prisma.user.findMany({
+    take: 2,
+    skip: 1,
+  });
+  return res.status(200).json({
+    status: "success",
+    message: "Users fetched successfully",
+    data: users,
+  });
+};
+
 exports.getUser = async (req, res) => {
   const { id } = req.params;
   //   console.log(typeof id);
