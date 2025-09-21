@@ -24,10 +24,12 @@ const userRoutes = require("./routes/users");
 const bookRoutes = require("./routes/books");
 const reviewRoutes = require("./routes/reviews");
 const followRoutes = require("./routes/follows");
+const exampleRoutes = require("./routes/example");
 
 app.use("/users", userRoutes);
 app.use("/books", bookRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/follows", followRoutes);
+app.use("/example", exampleRoutes);
 
 app.listen(3000, () => console.log("Server running on http://localhost:3000"));
