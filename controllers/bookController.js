@@ -160,3 +160,24 @@ exports.deleteBook = async (req, res) => {
     });
   }
 };
+
+exports.bookUser = async (req, res) => {
+  const { id } = req.params;
+  const book = await prisma.book.findUnique({
+    where: {
+      id: parseInt(id), // Important: string -> number
+    },
+    include: {
+      user: {
+        select: { email: true },
+      },
+    },
+  });
+  console.log(book);
+
+  return res.status(200).json({
+    status: "success",
+    message: "Books fetched successfully",
+    data: book,
+  });
+};
