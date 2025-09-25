@@ -65,9 +65,10 @@ exports.getExample = async (req, res) => {
     _min: { rating: true },
   });
   */
-
+  // Example: Group by userId and count number of books per user
+  /*
   const genreStats = await prisma.book.groupBy({
-    by: ["BookGenres"],
+    by: ["userId"],
     _count: { id: true },
   });
 
@@ -76,4 +77,39 @@ exports.getExample = async (req, res) => {
     message: "Example fetched successfully",
     data: genreStats,
   });
+*/
+  // Example: Transaction - Create a book and a review in a single transaction
+  /*
+  const data = await prisma.$transaction([
+    prisma.book.create({ data: { title: "New", author: "New", userId: 1 } }),
+    prisma.review.create({
+      data: { bookId: 1, rating: 5, comment: "Great!", userId: 1 },
+    }),
+  ]);
+  return res.status(200).json({
+    status: "success",
+    message: "Example fetched successfully",
+    data: data,
+  });
+  */
+
+  // Example: Raw SQL Query
+  /*
+  const email = "bob@example.com";
+  const data = await prisma.$queryRaw`SELECT * FROM User WHERE email = ${email}`;
+  console.log(data);
+
+  // const data = await prisma.user.findMany({
+  //   where: { name: name },
+  // });
+  return res.status(200).json({
+    status: "success",
+    message: "Example fetched successfully",
+    data: data,
+  });
+  */
+
+
+
+  
 };
